@@ -1,0 +1,23 @@
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+  instance:
+    hostname: localhost
+    #prefer-ip-address: true
+  server:
+    #enable-self-preservation: false
+    #wait-time-in-ms-when-sync-empty: 0
+    renewal-percent-threshold: 0.85
+    enableSelfPreservation: false
+server:
+  port: 8761
+#spring:
+#    application:
+#        name: USER-Service
+#        #this configguration property is middle level 
+#    cloud:
+#        config:
+#            server:
+#                git:
+#                    uri: https://github.com/jit9628/microservices-configuration-server.git
