@@ -1,5 +1,7 @@
 package com.category.categoryservice.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +19,9 @@ import lombok.Setter;
 public class Category {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cid;
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2",strategy = "uuid2")
+	private String cid;
 	private String categoryname;
 	
 	

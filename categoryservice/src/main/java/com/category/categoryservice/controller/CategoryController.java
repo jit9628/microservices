@@ -38,7 +38,6 @@ public class CategoryController {
 	private ApiResponse apiResponse;
 	private ModelMapper mapper;
 	private CategoryProductService categoryProductServiceProxy;
-
 	@Autowired
 	public CategoryController(CategoryService categoryService, RestTemplate restTemplate, ModelMapper mapper,
 			ApiResponse apiResponse, CategoryProductService categoryProductServiceProxy) {
@@ -48,39 +47,30 @@ public class CategoryController {
 		this.apiResponse = apiResponse;
 		this.categoryProductServiceProxy = categoryProductServiceProxy;
 	}
-
 	@PostMapping("addcategory")
 	public ResponseEntity<?> addCategory(@RequestBody Category category) {
 		String addCategory = this.categoryService.addCategory(category);
 		return new ResponseEntity<>(Map.of("status", "success", "message", addCategory), HttpStatus.OK);
 	}
-
 	@GetMapping(value = "fetchAll")
 	public ResponseEntity<?> fetchAll() {
 		List<Category> fetchAllCategory = this.categoryService.fetchAllCategory();
 		return new ResponseEntity<>(Map.of("status", "success", "data", fetchAllCategory), HttpStatus.OK);
 	}
-
 	// openfeign calls for communicatting defferent web services
 	@GetMapping("/feign")
 	public ResponseEntity<?> getAllProduct() {
 		return this.categoryProductServiceProxy.getProduct();
 	}
-
 	@GetMapping("/feign/{id}")
-	public ResponseEntity<?> getSingleProduct(@PathVariable Integer id) {
+	public ResponseEntity<?> getSingleProduct(@PathVariable String id) {
 		return this.categoryProductServiceProxy.getSingleProductData(id);
 	}
-	
-	
-	@GetMapping("/feign/productfromcategoryid/{category_id}")
-	public ResponseEntity<?> findProductByCategoryId(@PathVariable("category_id") Integer category_id){
-		return this.categoryProductServiceProxy.getProductBasedOnCategoryId(category_id);
+	@GetMapping("/feign/productfromcategoryid/{categoryid}")
+	public ResponseEntity<?> findProductByCategoryId(@PathVariable("categoryid") String  categoryid){
+		return this.categoryProductServiceProxy.findProductByCategoryId(categoryid);
 		
 	}
-	
-	
-
 	// fetch product from category
 	@GetMapping(value = "fetchBycategory/{cid}")
 	@CircuitBreaker(name = "orderProductBreaker", fallbackMethod = "orderProductBreaker")
@@ -105,23 +95,20 @@ public class CategoryController {
 		ArrayList<Data> data = result.getBody().data;
 		return new ResponseEntity<>(Map.of("status", "success", "data", data), HttpStatus.OK);
 	}
-
 	// handle after dependent service is down any reason
-	public ResponseEntity<?> orderProductBreaker(int cid, Exception ex) {
+	public ResponseEntity<?> orderProductBreaker(String cid, Exception ex) {
 		return new ResponseEntity<>(
 				Map.of("status", "200", "message",
 						"Down Product Service if Service Is Up And Down Your Request Is Send Back Response Normally !"),
 				HttpStatus.BAD_REQUEST);
 	}
-
 	public ResponseEntity<?> categoryProductService(int cid, Exception ex) {
 		return new ResponseEntity<>(Map.of("status", "200", "message",
 				"Retry Product Service if Service Is Up And Down Your Request Is Send Back Response Normally !"),
 				HttpStatus.BAD_REQUEST);
 	}
-
 	@GetMapping("remove/{cid}")
-	public ResponseEntity<?> removeData(@PathVariable("cid") int cid) {
+	public ResponseEntity<?> removeData(@PathVariable("cid") String cid) {
 		try {
 			String deleteCategory = this.categoryService.deleteCategory(cid);
 			return this.apiResponse.sendResponse(deleteCategory, "OK", HttpStatus.OK);
@@ -129,11 +116,10 @@ public class CategoryController {
 			return this.apiResponse.sendResponse(null, "INTERNAL ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 	// fetch category from category id
 	@GetMapping("/fetchById/{cid}")
 	@CircuitBreaker(name = "orderProductBreaker", fallbackMethod = "orderProductBreaker")
-	public ResponseEntity<?> findCategoryFromCategoryId(@PathVariable("cid") int cid) {
+	public ResponseEntity<?> findCategoryFromCategoryId(@PathVariable("cid") String cid) {
 		Optional<Category> findCategoryById = this.categoryService.findCategoryById(cid);
 		CategoryDto map = this.mapper.map(findCategoryById.get(), CategoryDto.class);
 		ResponseEntity<CategoryWiseProduct> forEntity = this.restTemplate.getForEntity(
@@ -155,5 +141,8 @@ public class CategoryController {
 		// return new
 		// ResponseEntity<>(Map.of("data",findCategoryById,"product",forEntity),HttpStatus.OK);
 	}
+	
+	
+	
 
 }

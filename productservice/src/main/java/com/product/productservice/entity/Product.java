@@ -4,9 +4,10 @@ package com.product.productservice.entity;
 
 import java.util.Date;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,11 +20,12 @@ import lombok.Setter;
 @Entity
 public class Product {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int pid;
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2",strategy = "uuid2")
+	private String pid;
 	private String productname;
 	private int quantity;
 	private Date createddate;
-	private int categoryid;
+	private String categoryid;
 	
 }

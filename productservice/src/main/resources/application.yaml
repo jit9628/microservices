@@ -44,7 +44,15 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: "*"
+  info:
+    env:
+      enabled: true
+info:
+  app:
+    name: "Product Service"
+    version: "3.2.7.-SNAPSHOT"
+    discription: "This Service To Handle All Product Sprcific Task.. .. "
 
   endpoint:
     health:

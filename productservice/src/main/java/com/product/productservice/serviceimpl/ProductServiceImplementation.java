@@ -22,26 +22,14 @@ public class ProductServiceImplementation implements ProductService {
 	@Override
 	public Boolean addProduct(ProductDto productDto) {
 		System.out.println("Product Service Executed ..");
-		// product is existe or not
-		// this.mapper.map(productDto, Product.class)
-		// this.productRepository.save(this.mapper.map(productDto, Product.class));
-//		if(this.productRepository.save(this.mapper.map(productDto, Product.class)) instanceof Product)
-		
 		if(this.productRepository.existsByProductname(productDto.getProductname())) {
 			return false;
 		}
-		
 		Product map = this.mapper.map(productDto, Product.class);
-		//map.setProductname(productDto.getProductname());
-	//	map.setQuantity(productDto.getQuantity());
 		map.setCreateddate(new java.util.Date());
 		Product save = this.productRepository.save(map);
 		return (save instanceof Product)?true:false;
-//		return (this.productRepository.existsByProductname(productDto.getProductname())) ? false
-//				: (this.productRepository.save(this.mapper.map(productDto, Product.class)) instanceof Product) ? true
-//						: false;
-		// return null;
-		
+
 	}
 	@Override
 	public List<Product> fetchAllProduct() {
@@ -49,17 +37,17 @@ public class ProductServiceImplementation implements ProductService {
 	}
 
 	@Override
-	public Optional<Product> findByProductId(int id) {
+	public Optional<Product> findByProductId(String id) {
 		return this.productRepository.findById(id);
 	//	return Optional.empty();
 	}
 	@Override
-	public List<Product> findProductByCategoryId(int categoryid) {
+	public List<Product> findProductByCategoryId(String categoryid) {
 	List<Product> findByCategoryid = this.productRepository.findByCategoryid(categoryid);
 		return findByCategoryid;
 	}
 	@Override
-	public String deleteProduct(int id) {
+	public String deleteProduct(String id) {
 //		check if exists or not 
 		// TODO Auto-generated method stub
 		boolean existsById = this.productRepository.existsById(id);

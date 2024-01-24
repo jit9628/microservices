@@ -29,66 +29,58 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 public class ProductController {
 	@Autowired
 	private ProductService productService;
+
 	@PostMapping("saveproduct")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto)
 //	@PostMapping("/saveproduct")
 	{
-		System.out.println("Jitendra Shukla ... ");
-		// System.out.println("MultiPart file is "+file.getOriginalFilename());
+	
 		return (!this.productService.addProduct(productDto))
 				? new ResponseEntity<>(Map.of("status", "CONFLICT", "message", "Can't Save Your Product"),
 						org.springframework.http.HttpStatus.CONFLICT)
 				: new ResponseEntity<>(Map.of("status", "OK", "message", "Saved Your Product"),
 						org.springframework.http.HttpStatus.OK);
 	}
-	
+
 	@GetMapping("fetchAllProduct")
-	//@CrossOrigin(origins = "*")
+	// @CrossOrigin(origins = "*")
 //	@LoadBalanced
 	public ResponseEntity<?> findAllProduct() {
 		List<Product> fetchAllProduct = this.productService.fetchAllProduct();
 		return new ResponseEntity<>(Map.of("status", "OK", "data", fetchAllProduct),
 				org.springframework.http.HttpStatus.OK);
 	}
-	
+
 	@GetMapping("singledata/{id}")
-	public ResponseEntity<?> getSingleProductData(@PathVariable int id){
+	public ResponseEntity<?> getSingleProductData(@PathVariable String id) {
 		Optional<Product> findByProductId = this.productService.findByProductId(id);
-		return new ResponseEntity<>(Map.of("message","success","data",findByProductId),HttpStatus.OK);
+		return new ResponseEntity<>(Map.of("message", "success", "data", findByProductId), HttpStatus.OK);
 	}
 
 	@GetMapping("findProductByCategoryId/{categoryid}")
-	@CrossOrigin(origins = "*")
-@CircuitBreaker(name = "downcategoryservice",fallbackMethod = "handleCategoryService")
-	public ResponseEntity<?> findProductByCategoryId(@PathVariable("categoryid") int categoryid){
+//	@CircuitBreaker(name = "downcategoryservice", fallbackMethod = "handleCategoryService")
+	public ResponseEntity<?> findProductByCategoryId(@PathVariable("categoryid") String categoryid) {
 		List<Product> findProductByCategoryId = this.productService.findProductByCategoryId(categoryid);
-		return new ResponseEntity<>(Map.of("message","success","data",findProductByCategoryId),HttpStatus.OK);
+		return new ResponseEntity<>(Map.of("message", "success", "data", findProductByCategoryId), HttpStatus.OK);
 
 	}
-	
-	
+
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable("id") int id){
+	public ResponseEntity<?> deleteProduct(@PathVariable("id") String id) {
 		String deleteProduct = this.productService.deleteProduct(id);
-		return new ResponseEntity<>(Map.of("status","200","message",deleteProduct),HttpStatus.OK);
+		return new ResponseEntity<>(Map.of("status", "200", "message", deleteProduct), HttpStatus.OK);
 	}
-	
-	  public ResponseEntity<?> handleCategoryService(int userId, Exception ex) {
+
+	public ResponseEntity<?> handleCategoryService(int userId, Exception ex) {
 //        logger.info("Fallback is executed because service is down : ", ex.getMessage());
 
-        ex.printStackTrace();
+		ex.printStackTrace();
 
-        //User user = User.builder().email("dummy@gmail.com").name("Dummy").about("This user is created dummy because some service is down").userId("141234").build();
-		return new ResponseEntity<>(Map.of("message","success","data","Service Is Down"),HttpStatus.OK);
-    }
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		// User user = User.builder().email("dummy@gmail.com").name("Dummy").about("This
+		// user is created dummy because some service is
+		// down").userId("141234").build();
+		return new ResponseEntity<>(Map.of("message", "success", "data", "Service Is Down"), HttpStatus.OK);
+	}
+
 }

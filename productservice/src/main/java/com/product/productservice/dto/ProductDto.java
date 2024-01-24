@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
-	private int pid;
+	private String pid;
 	private String productname;
 	private int quantity;
 	private Date createddate;
-	private int categoryid;
+	private String categoryid;
 	private List<CategoryDto> categories;
 }

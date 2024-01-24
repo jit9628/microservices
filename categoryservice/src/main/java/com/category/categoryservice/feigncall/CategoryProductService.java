@@ -12,7 +12,7 @@ public interface CategoryProductService {
 	@GetMapping("fetchAllProduct")
 	public ResponseEntity<?> getProduct();
 	@GetMapping("singledata/{id}")
-	public ResponseEntity<?> getSingleProductData(@PathVariable(name="id") Integer id);	
-	@GetMapping("/findProductByCategoryId/{category_id")
-	public ResponseEntity<?> getProductBasedOnCategoryId(@PathVariable(name="category_id") Integer category_id);	
+	public ResponseEntity<?> getSingleProductData(@PathVariable(name="id") String id);	
+	@GetMapping("findProductByCategoryId/{categoryid}")
+	public ResponseEntity<?> findProductByCategoryId(@PathVariable("categoryid") String categoryid);	
 }

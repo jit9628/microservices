@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Data {
-	  public int pid;
-	    public String productname;
-	    public int quantity;
-	    public Date createddate;
-	    public int categoryid;
+	public String pid;
+	public String productname;
+	public int quantity;
+	public Date createddate;
+	public String categoryid;
 
 }

@@ -40,12 +40,12 @@ public 	CategoryServiceImplementation(CategoryRepository categoryRepository){
 		
 	}
 	@Override
-	public String deleteCategory(int id) {
+	public String deleteCategory(String id) {
 	this.categoryRepository.deleteById(id);
 		return "Delete Category";
 	}
 	@Override
-	public Optional<Category> findCategoryById(int id) {
+	public Optional<Category> findCategoryById(String id) {
 		Optional<Category> findById = this.categoryRepository.findById(id);
 		return findById;
 	}
